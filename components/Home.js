@@ -57,14 +57,14 @@ export default class Home extends Component {
 
         {/*{ images.length &&*/}
         <FlatList
-          style={styles.imagesContainer}
+          style={styles.imagesBlock}
           data={[{key: 'a'}, {key: 'b'}]}
           // data={images}
           numColumns={2}
           renderItem={({item}) =>
             <View style={styles.columns}>
               <TouchableOpacity
-                style={{position: 'relative', overflow: 'hidden', flex: 1, height: 100, width: '100%'}}
+                style={styles.imageContainer}
                 onPress={() => this.props.navigation.navigate('ImagePreview', { url: url } )}
               >
                 <Image
@@ -74,7 +74,7 @@ export default class Home extends Component {
                   resizeMode="cover"
                 />
                 <View
-                  style={{ width: '100%', padding: 10, position: 'absolute', bottom: 0, zIndex: 2, backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
+                  style={styles.imageTitle}
                 >
                   <Text numberOfLines={1}>IMAGE DESCRIPTION gsdds</Text>
                   {/*<Text numberOfLines={1}>{item.title}</Text>*/}
@@ -96,9 +96,10 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingBottom: 15
   },
-  imagesContainer: {
-    flex: 1,
-    paddingHorizontal: 10
+  homeTitle: {
+    fontSize: 26,
+    textAlign: 'center',
+    marginBottom: 10
   },
   searchInput: {
     height: 40,
@@ -107,13 +108,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 30
   },
-  homeTitle: {
-    fontSize: 26,
-    textAlign: 'center',
-    marginBottom: 10
-  },
   columns: {
     flex: 0.5,
     paddingHorizontal: 20,
+  },
+  imagesBlock: {
+    flex: 1,
+    paddingHorizontal: 10
+  },
+  imageContainer: {
+    position: 'relative',
+    overflow: 'hidden',
+    flex: 1,
+    height: 100,
+    width: '100%'
+  },
+  imageTitle: {
+    width: '100%',
+    padding: 10,
+    position: 'absolute',
+    bottom: 0,
+    zIndex: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)'
   }
 });
