@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux'
 import { createStackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View } from 'react-native';
+import Home from './components/Home';
 
 import configureStore from './store/configureStore'
 const store = configureStore()
@@ -15,20 +16,19 @@ const styles = StyleSheet.create({
   },
 });
 
-class HomeScreen extends React.Component {
+const RootStack = createStackNavigator({
+  Home: {
+    screen: Home
+  },
+});
+
+export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <Text>Image search</Text>
-        </View>
+        <RootStack />
       </Provider>
     );
   }
 }
 
-export default createStackNavigator({
-  Home: {
-    screen: HomeScreen
-  },
-});
