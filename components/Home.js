@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Button, View, TextInput, Text, FlatList, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { connect } from "react-redux";
 import { getImages } from "../actions/images";
 
@@ -31,8 +39,11 @@ export default class Home extends Component {
     })
   }
 
-
   render() {
+
+    const { images: { images } } = this.props
+    const url = 'http://r.ddmcdn.com/s_f/o_1/cx_462/cy_245/cw_1349/ch_1349/w_720/APL/uploads/2015/06/caturday-shutterstock_149320799.jpg'
+
     return (
       <View style={styles.container}>
         <Text style={styles.homeTitle} >Image search</Text>
@@ -43,14 +54,36 @@ export default class Home extends Component {
           clearButtonMode="always"
           placeholder="Search"
         />
+
+        {/*{ images.length &&*/}
         <FlatList
-          style={{flex: 1, paddingHorizontal: 20}}
+          style={styles.imagesContainer}
           data={[{key: 'a'}, {key: 'b'}]}
+          // data={images}
           numColumns={2}
           renderItem={({item}) =>
-            <Text style={styles.columns}>{item.key}</Text>
+            <View style={styles.columns}>
+              <TouchableOpacity
+                style={{position: 'relative', overflow: 'hidden', flex: 1, height: 100, width: '100%'}}
+                onPress={() => this.props.navigation.navigate('ImagePreview', { url: url } )}
+              >
+                <Image
+                  style={{height: '100%'}}
+                  source={{uri: url}}
+                  // source={{uri: item.link}}
+                  resizeMode="cover"
+                />
+                <View
+                  style={{ width: '100%', padding: 10, position: 'absolute', bottom: 0, zIndex: 2, backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
+                >
+                  <Text numberOfLines={1}>IMAGE DESCRIPTION gsdds</Text>
+                  {/*<Text numberOfLines={1}>{item.title}</Text>*/}
+                </View>
+              </TouchableOpacity>
+            </View>
           }
-        />
+          />
+        {/*}*/}
       </View>
     );
   }
@@ -63,12 +96,16 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingBottom: 15
   },
+  imagesContainer: {
+    flex: 1,
+    paddingHorizontal: 10
+  },
   searchInput: {
     height: 40,
     width: '100%',
     backgroundColor: '#FAF6F5',
     paddingHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 30
   },
   homeTitle: {
     fontSize: 26,
@@ -77,6 +114,6 @@ const styles = StyleSheet.create({
   },
   columns: {
     flex: 0.5,
-    backgroundColor: 'powderblue'
+    paddingHorizontal: 20,
   }
 });

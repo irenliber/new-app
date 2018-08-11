@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import { createStackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './components/Home';
+import ImagePreview from './components/ImagePreview';
 
 import configureStore from './store/configureStore'
 const store = configureStore()
@@ -20,6 +21,9 @@ const RootStack = createStackNavigator({
   Home: {
     screen: Home
   },
+  ImagePreview: {
+    screen: ImagePreview
+  }
 });
 
 export default class App extends React.Component {
