@@ -18,7 +18,7 @@ import { getImages } from "../actions/images";
 
 export default class Home extends Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
       text: '',
       typingTimeout: 0
@@ -34,7 +34,9 @@ export default class Home extends Component {
       text: text,
       typingTimeout: setTimeout(() => {
         console.log(text)
-        // this.props.getImages()
+        if (text.length > 0 ) {
+          this.props.getImages(text)
+        }
       }, 2000)
     })
   }
@@ -42,7 +44,27 @@ export default class Home extends Component {
   render() {
 
     const { images: { images } } = this.props
-    const url = 'http://r.ddmcdn.com/s_f/o_1/cx_462/cy_245/cw_1349/ch_1349/w_720/APL/uploads/2015/06/caturday-shutterstock_149320799.jpg'
+
+    const image = { "kind": "customsearch#result",
+      "title": "Cats | Animal Planet",
+      "htmlTitle": "\u003cb\u003eCats\u003c/b\u003e | Animal Planet",
+      "link": "http://r.ddmcdn.com/s_f/o_1/cx_462/cy_245/cw_1349/ch_1349/w_720/APL/uploads/2015/06/caturday-shutterstock_149320799.jpg",
+      "displayLink": "www.animalplanet.com",
+      "snippet": "Cats | Animal Planet",
+      "htmlSnippet": "\u003cb\u003eCats\u003c/b\u003e | Animal Planet",
+      "mime": "image/jpeg",
+      "image": {
+        "contextLink": "http://www.animalplanet.com/pets/cats/",
+        "height": 720,
+        "width": 720,
+        "byteSize": 63220,
+        "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpQbbSO17HYWZxPPL80FSIYVHpvYGzJKjY4aPFtfEr7409Oh4I52Isw6mE",
+        "thumbnailHeight": 140,
+        "thumbnailWidth": 140
+      }
+    }
+
+
 
     return (
       <View style={styles.container}>
@@ -54,36 +76,34 @@ export default class Home extends Component {
           clearButtonMode="always"
           placeholder="Search"
         />
-
-        {/*{ images.length &&*/}
-        <FlatList
-          style={styles.imagesBlock}
-          data={[{key: 'a'}, {key: 'b'}]}
-          // data={images}
-          numColumns={2}
-          renderItem={({item}) =>
-            <View style={styles.columns}>
-              <TouchableOpacity
-                style={styles.imageContainer}
-                onPress={() => this.props.navigation.navigate('ImagePreview', { url: url } )}
-              >
-                <Image
-                  style={{height: '100%'}}
-                  source={{uri: url}}
-                  // source={{uri: item.link}}
-                  resizeMode="cover"
-                />
-                <View
-                  style={styles.imageTitle}
+        { images.length &&
+          <FlatList
+            style={styles.imagesBlock}
+            // data={[image]}
+            data={images}
+            numColumns={2}
+            keyExtractor={(item, index) => index}
+            renderItem={({item}) =>
+              <View style={styles.columns}>
+                <TouchableOpacity
+                  style={styles.imageContainer}
+                  onPress={() => this.props.navigation.navigate('ImagePreview', { image: item } )}
                 >
-                  <Text numberOfLines={1}>IMAGE DESCRIPTION gsdds</Text>
-                  {/*<Text numberOfLines={1}>{item.title}</Text>*/}
-                </View>
-              </TouchableOpacity>
-            </View>
-          }
-          />
-        {/*}*/}
+                  <Image
+                    style={{height: '100%'}}
+                    source={{uri: item.link}}
+                    resizeMode="cover"
+                  />
+                  <View
+                    style={styles.imageTitle}
+                  >
+                    <Text numberOfLines={1}>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            }
+            />
+        }
       </View>
     );
   }
@@ -111,6 +131,7 @@ const styles = StyleSheet.create({
   columns: {
     flex: 0.5,
     paddingHorizontal: 20,
+    marginBottom: 20
   },
   imagesBlock: {
     flex: 1,
