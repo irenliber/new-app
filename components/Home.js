@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
@@ -20,7 +21,7 @@ export default class Home extends Component {
   constructor(props) {
     super();
     this.state = {
-      text: '',
+      text: props.images.keyword,
       typingTimeout: 0
     };
   }
@@ -33,17 +34,14 @@ export default class Home extends Component {
     this.setState({
       text: text,
       typingTimeout: setTimeout(() => {
-        console.log(text)
-        if (text.length > 0 ) {
-          this.props.getImages(text)
-        }
-      }, 2000)
+        this.props.getImages(text)
+      }, 1500)
     })
   }
 
   render() {
 
-    const { images: { images } } = this.props
+    const { images: { images, isLoading } } = this.props
 
     const image = { "kind": "customsearch#result",
       "title": "Cats | Animal Planet",
@@ -64,8 +62,6 @@ export default class Home extends Component {
       }
     }
 
-
-
     return (
       <View style={styles.container}>
         <Text style={styles.homeTitle} >Image search</Text>
@@ -76,13 +72,15 @@ export default class Home extends Component {
           clearButtonMode="always"
           placeholder="Search"
         />
-        { images.length &&
+        { isLoading ? (
+          <ActivityIndicator size="large" color="#707070" style={{ marginTop: 20 }}/>
+        ) : (
           <FlatList
             style={styles.imagesBlock}
             // data={[image]}
             data={images}
             numColumns={2}
-            keyExtractor={(item, index) => index}
+            keyExtractor={(item, index) => item.link}
             renderItem={({item}) =>
               <View style={styles.columns}>
                 <TouchableOpacity
@@ -91,7 +89,7 @@ export default class Home extends Component {
                 >
                   <Image
                     style={{height: '100%'}}
-                    source={{uri: item.link}}
+                    source={{uri: item.image.thumbnailLink}}
                     resizeMode="cover"
                   />
                   <View
@@ -102,8 +100,8 @@ export default class Home extends Component {
                 </TouchableOpacity>
               </View>
             }
-            />
-        }
+          />
+        )}
       </View>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   Linking,
@@ -11,11 +12,21 @@ import {
 import ImageZoom from 'react-native-image-pan-zoom';
 
 export default class ImagePreview extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      loading: false
+    };
+  }
+
   render() {
     const image = this.props.navigation.getParam('image', {})
 
     return (
       <View style={styles.container}>
+        { this.state.loading &&
+          <ActivityIndicator size="large" color="#707070" style={ styles.loading }/>
+        }
         <ImageZoom
           cropWidth={Dimensions.get('window').width}
           cropHeight={Dimensions.get('window').height}
@@ -28,6 +39,8 @@ export default class ImagePreview extends Component {
             style={{width: '100%', height: '100%'}}
             source={{uri: image.link}}
             resizeMode="contain"
+            onLoadStart={(e) => this.setState({loading: true})}
+            onLoadEnd={(e) => this.setState({loading: false})}
           />
         </ImageZoom>
 
@@ -56,6 +69,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative'
   },
+  loading: {
+    position: 'absolute',
+    zIndex: 10,
+    marginTop: 20
+  },
   imageTitle: {
     width: '100%',
     padding: 10,
@@ -63,12 +81,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    height: 180,
+    height: 160,
   },
   contextLink: {
     backgroundColor: 'black',
     maxWidth: 150,
     padding: 10,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    marginTop: 10
   }
 });

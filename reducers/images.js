@@ -6,6 +6,7 @@ import {
 
 const INITIAL_STATE = {
     images: [],
+    keyword: '',
     isLoading: false,
     error: null,
 };
@@ -15,7 +16,8 @@ const images = (state = INITIAL_STATE, action) => {
         case GET_IMAGES:
             return {
                 ...state,
-                isLoading: true
+                isLoading: true,
+                keyword: action.keyword
             };
         case GET_IMAGES_SUCCESS:
             return {
