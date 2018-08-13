@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     zIndex: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
     height: 160,
   },
   contextLink: {

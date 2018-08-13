@@ -22,7 +22,8 @@ export default class Home extends Component {
     super();
     this.state = {
       text: props.images.keyword,
-      typingTimeout: 0
+      typingTimeout: 0,
+      grid: 2
     };
   }
 
@@ -40,27 +41,8 @@ export default class Home extends Component {
   }
 
   render() {
-
     const { images: { images, isLoading } } = this.props
-
-    const image = { "kind": "customsearch#result",
-      "title": "Cats | Animal Planet",
-      "htmlTitle": "\u003cb\u003eCats\u003c/b\u003e | Animal Planet",
-      "link": "http://r.ddmcdn.com/s_f/o_1/cx_462/cy_245/cw_1349/ch_1349/w_720/APL/uploads/2015/06/caturday-shutterstock_149320799.jpg",
-      "displayLink": "www.animalplanet.com",
-      "snippet": "Cats | Animal Planet",
-      "htmlSnippet": "\u003cb\u003eCats\u003c/b\u003e | Animal Planet",
-      "mime": "image/jpeg",
-      "image": {
-        "contextLink": "http://www.animalplanet.com/pets/cats/",
-        "height": 720,
-        "width": 720,
-        "byteSize": 63220,
-        "thumbnailLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpQbbSO17HYWZxPPL80FSIYVHpvYGzJKjY4aPFtfEr7409Oh4I52Isw6mE",
-        "thumbnailHeight": 140,
-        "thumbnailWidth": 140
-      }
-    }
+    const { grid } = this.state
 
     return (
       <View style={styles.container}>
@@ -71,33 +53,58 @@ export default class Home extends Component {
           value={this.state.text}
           clearButtonMode="always"
           placeholder="Search"
+          underlineColorAndroid="transparent"
         />
+
+        <View style={{ flexDirection: 'row', marginBottom: 30, justifyContent: 'space-between', flexWrap: 'nowrap' }}>
+          <TouchableOpacity
+            style={{ backgroundColor: grid === 2 ? 'white' : '#FAF6F5', alignItems: 'center', width: '33.33%', borderColor: '#F4EBEC', borderRightWidth: 1, padding: 10}}
+            onPress={() => this.setState({ grid: 2})}
+          >
+            <Text>2 per row</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ backgroundColor: grid === 3 ? 'white' : '#FAF6F5', alignItems: 'center', width: '33.34%', borderColor: '#F4EBEC', borderRightWidth: 1, padding: 10}}
+            onPress={() => this.setState({ grid: 3})}
+          >
+            <Text>3 per row</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ backgroundColor: grid === 4 ? 'white' : '#FAF6F5', alignItems: 'center', width: '33.33%', padding: 10}}
+            onPress={() => this.setState({ grid: 4})}
+          >
+            <Text>4 per row</Text>
+          </TouchableOpacity>
+        </View>
+
         { isLoading ? (
           <ActivityIndicator size="large" color="#707070" style={{ marginTop: 20 }}/>
         ) : (
           <FlatList
             style={styles.imagesBlock}
-            // data={[image]}
-            data={images}
-            numColumns={2}
+            data={images.concat([{}, {}])}
+            numColumns={grid}
+            key = {grid}
             keyExtractor={(item, index) => item.link}
             renderItem={({item}) =>
-              <View style={styles.columns}>
-                <TouchableOpacity
-                  style={styles.imageContainer}
-                  onPress={() => this.props.navigation.navigate('ImagePreview', { image: item } )}
-                >
-                  <Image
-                    style={{height: '100%'}}
-                    source={{uri: item.image.thumbnailLink}}
-                    resizeMode="cover"
-                  />
-                  <View
-                    style={styles.imageTitle}
+              <View style={styles[`columns${grid}`]}>
+                {item.image &&
+                  <TouchableOpacity
+                    style={styles.imageContainer}
+                    onPress={() => this.props.navigation.navigate('ImagePreview', {image: item})}
                   >
-                    <Text numberOfLines={1}>{item.title}</Text>
-                  </View>
-                </TouchableOpacity>
+                    <Image
+                      style={{height: '100%'}}
+                      source={{uri: item.image.thumbnailLink}}
+                      resizeMode="cover"
+                    />
+                    <View
+                      style={styles.imageTitle}
+                    >
+                      <Text numberOfLines={1}>{item.title}</Text>
+                    </View>
+                  </TouchableOpacity>
+                }
               </View>
             }
           />
@@ -124,11 +131,22 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#FAF6F5',
     paddingHorizontal: 20,
-    marginBottom: 30
+    marginBottom: 10
   },
-  columns: {
+  columns2: {
     flex: 0.5,
     paddingHorizontal: 20,
+    marginBottom: 20
+  },
+  columns3: {
+    flex: 0.33,
+    margin: 5,
+    paddingHorizontal: 5,
+    marginBottom: 20
+  },
+  columns4: {
+    flex: 0.5,
+    paddingHorizontal: 5,
     marginBottom: 20
   },
   imagesBlock: {
