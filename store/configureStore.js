@@ -1,25 +1,25 @@
-import { createStore, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import rootReducer from '../reducers/index'
+import rootReducer from '../reducers/index';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['images']
-}
+  whitelist: ['images'],
+};
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export default function configureStore() {
-    let store = createStore(
-      persistedReducer,
-      applyMiddleware(thunkMiddleware)
-    );
+  const store = createStore(
+    persistedReducer,
+    applyMiddleware(thunkMiddleware),
+  );
 
-    let persistor = persistStore(store)
+  const persistor = persistStore(store);
 
-    return { store, persistor }
+  return { store, persistor };
 }

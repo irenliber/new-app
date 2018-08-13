@@ -1,21 +1,20 @@
 import React from 'react';
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
-
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import { createStackNavigator } from 'react-navigation';
 import Home from './components/Home';
 import ImagePreview from './components/ImagePreview';
+import configureStore from './store/configureStore';
 
-import configureStore from './store/configureStore'
-const store = configureStore()
+const store = configureStore();
 
 const RootStack = createStackNavigator({
   Home: {
-    screen: Home
+    screen: Home,
   },
   ImagePreview: {
-    screen: ImagePreview
-  }
+    screen: ImagePreview,
+  },
 });
 
 export default class App extends React.Component {
@@ -29,4 +28,3 @@ export default class App extends React.Component {
     );
   }
 }
-

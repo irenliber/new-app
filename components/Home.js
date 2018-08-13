@@ -12,6 +12,62 @@ import {
 import { connect } from "react-redux";
 import { getImages } from "../actions/images";
 
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#F4EBEC',
+    flex: 1,
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
+  homeTitle: {
+    fontSize: 26,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  searchInput: {
+    height: 40,
+    width: '100%',
+    backgroundColor: '#FAF6F5',
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  columns2: {
+    flex: 0.5,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  columns3: {
+    flex: 0.33,
+    margin: 5,
+    paddingHorizontal: 5,
+    marginBottom: 20,
+  },
+  columns4: {
+    flex: 0.5,
+    paddingHorizontal: 5,
+    marginBottom: 20,
+  },
+  imagesBlock: {
+    flex: 1,
+    paddingHorizontal: 10,
+  },
+  imageContainer: {
+    position: 'relative',
+    overflow: 'hidden',
+    flex: 1,
+    height: 100,
+    width: '100%',
+  },
+  imageTitle: {
+    width: '100%',
+    padding: 10,
+    position: 'absolute',
+    bottom: 0,
+    zIndex: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+  }
+});
+
 @connect(
   ({ images, isLoading }) => ({ images, isLoading }),
   { getImages },
@@ -23,7 +79,7 @@ export default class Home extends Component {
     this.state = {
       text: props.images.keyword,
       typingTimeout: 0,
-      grid: 2
+      grid: 2,
     };
   }
 
@@ -38,11 +94,11 @@ export default class Home extends Component {
         this.props.getImages(text)
       }, 1500)
     })
-  }
+  };
 
   render() {
-    const { images: { images, isLoading } } = this.props
-    const { grid } = this.state
+    const { images: { images, isLoading } } = this.props;
+    const { grid } = this.state;
 
     return (
       <View style={styles.container}>
@@ -85,7 +141,7 @@ export default class Home extends Component {
             data={images.concat([{}, {}])}
             numColumns={grid}
             key = {grid}
-            keyExtractor={(item, index) => item.link}
+            keyExtractor={(item) => item.link}
             renderItem={({item}) =>
               <View style={styles[`columns${grid}`]}>
                 {item.image &&
@@ -112,60 +168,4 @@ export default class Home extends Component {
       </View>
     );
   }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#F4EBEC',
-    flex: 1,
-    paddingTop: 15,
-    paddingBottom: 15
-  },
-  homeTitle: {
-    fontSize: 26,
-    textAlign: 'center',
-    marginBottom: 10
-  },
-  searchInput: {
-    height: 40,
-    width: '100%',
-    backgroundColor: '#FAF6F5',
-    paddingHorizontal: 20,
-    marginBottom: 10
-  },
-  columns2: {
-    flex: 0.5,
-    paddingHorizontal: 20,
-    marginBottom: 20
-  },
-  columns3: {
-    flex: 0.33,
-    margin: 5,
-    paddingHorizontal: 5,
-    marginBottom: 20
-  },
-  columns4: {
-    flex: 0.5,
-    paddingHorizontal: 5,
-    marginBottom: 20
-  },
-  imagesBlock: {
-    flex: 1,
-    paddingHorizontal: 10
-  },
-  imageContainer: {
-    position: 'relative',
-    overflow: 'hidden',
-    flex: 1,
-    height: 100,
-    width: '100%'
-  },
-  imageTitle: {
-    width: '100%',
-    padding: 10,
-    position: 'absolute',
-    bottom: 0,
-    zIndex: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)'
-  }
-});
+};
